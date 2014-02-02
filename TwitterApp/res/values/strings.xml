@@ -7,5 +7,9 @@
     <string name="title_activity_photos">Flickr Photos</string>
     <string name="login_label">Log in</string>
     <string name="title_activity_timeline">TimelineActivity</string>
+    <string name="compose_text">Compose tweet</string>
+    <string name="title_activity_compose_tweet">ComposeTweet</string>
+    <string name="charleft">Characters left:</string>
+    <string name="hintTweetCompose">What\'s happening?</string>
 
 </resources>

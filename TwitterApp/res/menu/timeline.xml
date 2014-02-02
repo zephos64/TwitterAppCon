@@ -1,5 +1,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
-
+	<item
+        android:id="@+id/miCompose"
+        android:icon="@drawable/ic_compose_tweet"
+        android:showAsAction="ifRoom"
+        android:onClick="onComposeTweet"
+        android:title="@string/compose_text">
+    </item>
 
 </menu>
