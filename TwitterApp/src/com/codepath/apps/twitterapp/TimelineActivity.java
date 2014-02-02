@@ -1,12 +1,15 @@
 package com.codepath.apps.twitterapp;
 
+import java.util.ArrayList;
+
 import org.json.JSONArray;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
+import android.widget.ListView;
 
-import com.activeandroid.util.Log;
+import com.codepath.apps.twitterapp.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 public class TimelineActivity extends Activity {
@@ -15,12 +18,13 @@ public class TimelineActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_timeline);
-		Log.d("debug", "Created Timeline Activity");
-		
+
 		TwitterApp.getRestClient().getHomeTimeline(1, new JsonHttpResponseHandler() {
 			@Override
-			public void onSuccess(JSONArray jsonTweets) {
-				System.out.println("THIS IS A SUCCESS" + jsonTweets.toString());
+			public void onSuccess(JSONArray jsonTweets) {				
+				ArrayList<Tweet> tweets = Tweet.fromJson(jsonTweets);
+				ListView lvTweets = (ListView) findViewById(R.id.lvTweets);
+				lvTweets.setAdapter(new TweetsAdapter(getBaseContext(), tweets));
 			}
 		});
 	}
