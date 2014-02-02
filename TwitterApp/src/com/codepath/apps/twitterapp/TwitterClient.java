@@ -29,18 +29,24 @@ public class TwitterClient extends OAuthBaseClient {
     public static final String REST_CONSUMER_SECRET = "LSpSxI3xL9qWRImYskcXzBOsGGT9FM8cK6ecPgdAdc"; // Change this
     public static final String REST_CALLBACK_URL = "oauth://twitterapp"; // Change this (here and in manifest)
     
+    public static final int TWITTER_NO_ID = -1;
+    
     public TwitterClient(Context context) {
         super(context, REST_API_CLASS, REST_URL, REST_CONSUMER_KEY, REST_CONSUMER_SECRET, REST_CALLBACK_URL);
     }
     
-    public void getHomeTimeline(int page, AsyncHttpResponseHandler handler) {
+    public void getHomeTimeline(long from, int max, AsyncHttpResponseHandler handler) {
     	String url = getApiUrl("statuses/home_timeline.json");
     	Log.d("debug", "Getting home timeline with url: " + url);
     	
     	RequestParams params = new RequestParams();
-    	params.put("page", String.valueOf(page));
+    	params.put("count", String.valueOf(max));
+    	if(from != TWITTER_NO_ID) {
+    		params.put("max_id", String.valueOf(from));
+    	}
     	
-    	getClient().get(url, null, handler);
+    	getClient().get(url, params, handler);
+    	
     }
     
     public void postTweet(String body, AsyncHttpResponseHandler handler) {

@@ -1,9 +1,14 @@
 package com.codepath.apps.twitterapp;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import android.content.Context;
 import android.text.Html;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +49,19 @@ public class TweetsAdapter extends ArrayAdapter<Tweet> {
 		bodyView.setText(Html.fromHtml(tweet.getBody()));
 		
 		TextView timeView = (TextView) view.findViewById(R.id.tvTimestamp);
-		timeView.setText(Html.fromHtml(tweet.getTimestamp()));
+		Date date = new Date();
+		try {
+			date = new SimpleDateFormat("EEE MMM dd kk:mm:ss ZZZZZ yyyy", Locale.ENGLISH).parse(tweet.getTimestamp());
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		String temp = (String) DateUtils.getRelativeDateTimeString(
+				getContext(),
+				date.getTime(),
+				DateUtils.SECOND_IN_MILLIS,
+				DateUtils.WEEK_IN_MILLIS,
+				0);
+		timeView.setText(Html.fromHtml(temp));
 		
 		return view;
 	}
