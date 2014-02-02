@@ -11,5 +11,7 @@
     <string name="title_activity_compose_tweet">ComposeTweet</string>
     <string name="charleft">Characters left:</string>
     <string name="hintTweetCompose">What\'s happening?</string>
+    <string name="defCharLimit">140</string>
+    <string name="tweet">Tweet</string>
 
 </resources>
