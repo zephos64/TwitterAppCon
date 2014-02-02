@@ -28,17 +28,26 @@ public class TwitterClient extends OAuthBaseClient {
     public static final String REST_CONSUMER_KEY = "hs7VtAmaZVXOjM811dotAg";       // Change this
     public static final String REST_CONSUMER_SECRET = "LSpSxI3xL9qWRImYskcXzBOsGGT9FM8cK6ecPgdAdc"; // Change this
     public static final String REST_CALLBACK_URL = "oauth://twitterapp"; // Change this (here and in manifest)
-    //public static final String REST_CALLBACK_URL = "oob";
     
     public TwitterClient(Context context) {
         super(context, REST_API_CLASS, REST_URL, REST_CONSUMER_KEY, REST_CONSUMER_SECRET, REST_CALLBACK_URL);
     }
     
-    public void getHomeTimeline(AsyncHttpResponseHandler handler) {
+    public void getHomeTimeline(int page, AsyncHttpResponseHandler handler) {
     	String url = getApiUrl("statuses/home_timeline.json");
     	Log.d("debug", "Getting home timeline with url: " + url);
     	
-    	client.post(url, null, handler);
+    	RequestParams params = new RequestParams();
+    	params.put("page", String.valueOf(page));
+    	
+    	getClient().get(url, null, handler);
+    }
+    
+    public void postTweet(String body, AsyncHttpResponseHandler handler) {
+    	String apiUrl = getApiUrl("statuses/update.json");
+    	RequestParams params = new RequestParams();
+    	params.put("status", body);
+    	getClient().post(apiUrl, params, handler);
     }
     
     /* 1. Define the endpoint URL with getApiUrl and pass a relative path to the endpoint
