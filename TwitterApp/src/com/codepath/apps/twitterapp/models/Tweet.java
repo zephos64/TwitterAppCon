@@ -11,6 +11,8 @@ private String body;
 private long uid;
 private boolean favorited;
 private boolean retweeted;
+private String timestamp;
+
     private User user;
 
     public User getUser() {
@@ -32,6 +34,10 @@ private boolean retweeted;
     public boolean isRetweeted() {
         return retweeted;
     }
+    
+    public String getTimestamp() {
+    	return timestamp;
+    }
 
     public static Tweet fromJson(JSONObject jsonObject) {
         Tweet tweet = new Tweet();
@@ -40,6 +46,7 @@ private boolean retweeted;
          tweet.uid = jsonObject.getLong("id");
          tweet.favorited = jsonObject.getBoolean("favorited");
          tweet.retweeted = jsonObject.getBoolean("retweeted");
+         tweet.timestamp = jsonObject.getString("created_at");
             tweet.user = User.fromJson(jsonObject.getJSONObject("user"));
         } catch (JSONException e) {
             e.printStackTrace();
