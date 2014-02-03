@@ -92,6 +92,7 @@ public class TimelineActivity extends Activity {
 			@Override
 			public void onSuccess(JSONObject response) {
 				user = User.fromJson(response);
+				setTitle("@"+user.getScreenName());
 			}
 		});
 	}
