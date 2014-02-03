@@ -9,16 +9,23 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.codepath.apps.twitterapp.models.User;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class ComposeTweet extends Activity {
 	
 	private EditText etComposeTweet;
 	private TextView tvCharLeftCounter;
 	private Button button1;
+	private ImageView ivProfile;
+	private TextView tvName;
+	private TextView tvScreenName;
 	
+	private User user;
 	private int defaultCharLimit = 140;
 	private boolean disableComp = false;
 	public static final String COMPOSE_KEY = "composedTweet";
@@ -31,6 +38,15 @@ public class ComposeTweet extends Activity {
 		etComposeTweet = (EditText) findViewById(R.id.etComposeTweet);
 		tvCharLeftCounter = (TextView) findViewById(R.id.tvCharLeftCounter);
 		button1 = (Button) findViewById(R.id.button1);
+		ivProfile = (ImageView) findViewById(R.id.ivProfile);
+		tvName = (TextView) findViewById(R.id.tvName);
+		tvScreenName = (TextView) findViewById(R.id.tvScreenName);
+		
+		Intent i = getIntent();
+		user = (User)i.getExtras().getSerializable(TimelineActivity.REQUEST_USER);
+		ImageLoader.getInstance().displayImage(user.getProfileImageUrl(), ivProfile);
+		tvName.setText(user.getName());
+		tvScreenName.setText("@"+user.getScreenName());
 		
 		setupViewListener();
 	}

@@ -9,23 +9,6 @@
     tools:context=".ComposeTweet" >
 
     <TextView
-        android:id="@+id/tvCharLeft"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:text="@string/charleft" />
-
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/tvCharLeft"
-        android:layout_alignLeft="@+id/tvCharLeft"
-        android:onClick="sendTweet"
-        android:text="@string/tweet" />
-
-    <TextView
         android:id="@+id/tvCharLeftCounter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -35,13 +18,57 @@
         android:layout_toRightOf="@+id/tvCharLeft"
         android:text="@string/defCharLimit" />
 
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:onClick="sendTweet"
+        android:text="@string/tweet" />
+
+    <ImageView
+        android:id="@+id/ivProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/button1"
+        android:paddingRight="5dp"
+        android:contentDescription="@string/descIcon" />
+    <TextView
+	        android:id="@+id/tvName"
+	        android:paddingRight="5dp"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignTop="@+id/ivProfile"
+	        android:layout_toRightOf="@+id/ivProfile"/>
+
+    <TextView
+        android:id="@+id/tvScreenName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tvName"
+        android:layout_toRightOf="@+id/tvName"
+        android:textColor="#777777" />
+
     <EditText
         android:id="@+id/etComposeTweet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/ivProfile"
         android:ems="10"
-        android:hint="@string/hintTweetCompose" />
+        android:hint="@string/hintTweetCompose" >
+
+        <requestFocus />
+    </EditText>
+
+    <TextView
+        android:id="@+id/tvCharLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/ivProfile"
+        android:layout_alignTop="@+id/button1"
+        android:text="@string/charleft" />
 
 </RelativeLayout>

@@ -55,12 +55,6 @@ public class TweetsAdapter extends ArrayAdapter<Tweet> {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		/*String temp = (String) DateUtils.getRelativeDateTimeString(
-				getContext(),
-				date.getTime(),
-				DateUtils.SECOND_IN_MILLIS,
-				DateUtils.WEEK_IN_MILLIS,
-				DateUtils.FORMAT_ABBREV_RELATIVE);*/
 		String temp = (String) DateUtils.getRelativeTimeSpanString(
 				date.getTime(),
 				System.currentTimeMillis(),

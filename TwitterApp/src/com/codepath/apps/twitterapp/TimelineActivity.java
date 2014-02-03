@@ -24,6 +24,7 @@ public class TimelineActivity extends Activity {
 	private ArrayList<Tweet> tweets;
 	
 	private final int TWEET_REQUEST_CODE = 20;
+	public static final String REQUEST_USER = "user";
 	private User user;
 	
 	@Override
@@ -53,6 +54,7 @@ public class TimelineActivity extends Activity {
 	
 	public void onComposeTweet(MenuItem mi) {
 		Intent i = new Intent(this, ComposeTweet.class);
+		i.putExtra(REQUEST_USER, user);
 		startActivityForResult(i, TWEET_REQUEST_CODE);
 	}
 	
@@ -92,10 +94,6 @@ public class TimelineActivity extends Activity {
 				user = User.fromJson(response);
 			}
 		});
-	}
-	
-	public User getUser() {
-		return user;
 	}
 	
 	@Override
