@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
@@ -84,6 +85,11 @@ public class TimelineActivity extends Activity {
 				
 				lastTweetId = tweets.get(tweets.size()-1).getId();
 			}
+			
+			@Override
+			public void onFailure(Throwable e, JSONObject err) {
+				Log.e("ERROR", e.toString());
+			}
 		});
 	}
 	
@@ -93,6 +99,11 @@ public class TimelineActivity extends Activity {
 			public void onSuccess(JSONObject response) {
 				user = User.fromJson(response);
 				setTitle("@"+user.getScreenName());
+			}
+			
+			@Override
+			public void onFailure(Throwable e, JSONObject err) {
+				Log.e("ERROR", e.toString());
 			}
 		});
 	}

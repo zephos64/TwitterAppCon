@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -102,6 +103,11 @@ public class ComposeTweet extends Activity {
 		         setResult(RESULT_OK, i);
 		         finish();
 		     }
+			
+			@Override
+			public void onFailure(Throwable e, String err) {
+				Log.e("ERROR", e.toString());
+			}
 		});
 	}
 }
