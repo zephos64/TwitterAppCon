@@ -16,19 +16,6 @@
         android:layout_alignParentLeft="true"
         android:text="@string/charleft" />
 
-    <EditText
-        android:id="@+id/etComposeTweet"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:ems="10"
-        android:hint="@string/hintTweetCompose" >
-
-        <requestFocus />
-    </EditText>
-
     <Button
         android:id="@+id/button1"
         android:layout_width="wrap_content"
@@ -47,5 +34,14 @@
         android:layout_marginLeft="16dp"
         android:layout_toRightOf="@+id/tvCharLeft"
         android:text="@string/defCharLimit" />
+
+    <EditText
+        android:id="@+id/etComposeTweet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:ems="10"
+        android:hint="@string/hintTweetCompose" />
 
 </RelativeLayout>
