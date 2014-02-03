@@ -1,13 +1,17 @@
 package com.codepath.apps.twitterapp;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.loopj.android.http.AsyncHttpResponseHandler;
 
 public class ComposeTweet extends Activity {
 	
@@ -17,7 +21,8 @@ public class ComposeTweet extends Activity {
 	
 	private int defaultCharLimit = 140;
 	private boolean disableComp = false;
-
+	public static final String COMPOSE_KEY = "composedTweet";
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -68,6 +73,19 @@ public class ComposeTweet extends Activity {
 					button1.setEnabled(true);
 				}
 			}
+		});
+	}
+	
+	public void sendTweet(View v) {
+		TwitterApp.getRestClient().postTweet(etComposeTweet.getText().toString(),
+				new AsyncHttpResponseHandler(){
+			@Override
+			public void onSuccess(String response) {
+		         Intent i = new Intent();
+		         i.putExtra(COMPOSE_KEY , response);
+		         setResult(RESULT_OK, i);
+		         finish();
+		     }
 		});
 	}
 }

@@ -3,6 +3,8 @@ package com.codepath.apps.twitterapp;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -12,6 +14,7 @@ import android.view.MenuItem;
 import android.widget.ListView;
 
 import com.codepath.apps.twitterapp.models.Tweet;
+import com.codepath.apps.twitterapp.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 public class TimelineActivity extends Activity {
@@ -19,6 +22,9 @@ public class TimelineActivity extends Activity {
 	private long lastTweetId;
 	private TweetsAdapter tweetAdapter;
 	private ArrayList<Tweet> tweets;
+	
+	private final int TWEET_REQUEST_CODE = 20;
+	private User user;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +41,7 @@ public class TimelineActivity extends Activity {
 		createMoreDataFromApi(25);
 		
 		setupListeners();
+		setUser();
 	}
 
 	@Override
@@ -46,7 +53,7 @@ public class TimelineActivity extends Activity {
 	
 	public void onComposeTweet(MenuItem mi) {
 		Intent i = new Intent(this, ComposeTweet.class);
-		startActivity(i);
+		startActivityForResult(i, TWEET_REQUEST_CODE);
 	}
 	
 	private void setupListeners() {
@@ -76,5 +83,33 @@ public class TimelineActivity extends Activity {
 				lastTweetId = tweets.get(tweets.size()-1).getId();
 			}
 		});
+	}
+	
+	private void setUser() {
+		TwitterApp.getRestClient().getAccountDetails(new JsonHttpResponseHandler(){
+			@Override
+			public void onSuccess(JSONObject response) {
+				user = User.fromJson(response);
+			}
+		});
+	}
+	
+	public User getUser() {
+		return user;
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if(resultCode == RESULT_OK && requestCode == TWEET_REQUEST_CODE) {
+			String response = data.getStringExtra(ComposeTweet.COMPOSE_KEY);
+			JSONObject jsonRes = new JSONObject();
+			try {
+				jsonRes = new JSONObject(response);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			Tweet myTweet = Tweet.fromJson(jsonRes);
+			tweetAdapter.insert(myTweet, 0);
+		}
 	}
 }

@@ -35,6 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/tvCharLeft"
         android:layout_alignLeft="@+id/tvCharLeft"
+        android:onClick="sendTweet"
         android:text="@string/tweet" />
 
     <TextView
