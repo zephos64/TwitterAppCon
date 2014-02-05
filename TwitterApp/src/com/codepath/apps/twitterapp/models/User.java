@@ -5,6 +5,8 @@ import java.io.Serializable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 public class User implements Serializable {
 	/**
 	 * 
@@ -63,6 +65,7 @@ public class User implements Serializable {
         	u.followersCount = json.getInt("followers_count");
         	u.friendsCount = json.getInt("friends_count");
         } catch (JSONException e) {
+            Log.e("ERROR", "Error in parsing user object: " + e.toString());
             e.printStackTrace();
         }
         return u;
