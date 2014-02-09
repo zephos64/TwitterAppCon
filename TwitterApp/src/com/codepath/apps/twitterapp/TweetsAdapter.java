@@ -54,7 +54,7 @@ public class TweetsAdapter extends ArrayAdapter<Tweet> {
 		try {
 			date = new SimpleDateFormat("EEE MMM dd kk:mm:ss ZZZZZ yyyy", Locale.ENGLISH).parse(tweet.getTimestamp());
 		} catch (ParseException e) {
-			Log.e("ERROR" , "Error in constructing date: " + e.toString());
+			Log.e("err" , "Error in constructing date: " + e.toString());
 			e.printStackTrace();
 		}
 		String temp = (String) DateUtils.getRelativeTimeSpanString(

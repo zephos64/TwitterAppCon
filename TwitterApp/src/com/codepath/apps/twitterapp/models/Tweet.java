@@ -51,7 +51,7 @@ private String timestamp;
          tweet.timestamp = jsonObject.getString("created_at");
             tweet.user = User.fromJson(jsonObject.getJSONObject("user"));
         } catch (JSONException e) {
-            Log.e("ERROR", "Error in parsing Tweet " + e.toString());
+            Log.e("err", "Error in parsing Tweet " + e.toString());
             e.printStackTrace();
             return null;
         }
@@ -66,7 +66,7 @@ private String timestamp;
             try {
                 tweetJson = jsonArray.getJSONObject(i);
             } catch (Exception e) {
-            	Log.e("ERROR", "Error in parsing Tweet in tweet list " + e.toString());
+            	Log.e("err", "Error in parsing Tweet in tweet list " + e.toString());
             	e.printStackTrace();
                 continue;
             }

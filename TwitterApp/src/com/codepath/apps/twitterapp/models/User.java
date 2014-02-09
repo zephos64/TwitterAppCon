@@ -65,7 +65,7 @@ public class User implements Serializable {
         	u.followersCount = json.getInt("followers_count");
         	u.friendsCount = json.getInt("friends_count");
         } catch (JSONException e) {
-            Log.e("ERROR", "Error in parsing user object: " + e.toString());
+            Log.e("err", "Error in parsing user object: " + e.toString());
             e.printStackTrace();
         }
         return u;

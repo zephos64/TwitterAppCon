@@ -106,7 +106,7 @@ public class ComposeTweet extends Activity {
 			
 			@Override
 			public void onFailure(Throwable e, String err) {
-				Log.e("ERROR", e.toString());
+				Log.e("err", e.toString());
 			}
 		});
 	}
