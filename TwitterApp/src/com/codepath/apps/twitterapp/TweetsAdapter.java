@@ -41,9 +41,22 @@ public class TweetsAdapter extends ArrayAdapter<Tweet> {
 		ImageLoader.getInstance().displayImage(tweet.getUser().getProfileImageUrl(), imageView);
 		
 		TextView nameView = (TextView) view.findViewById(R.id.tvName);
-		String formattedName = "<b>" + tweet.getUser().getName()
+		String formattedName = "<b>";
+		int maxLength = 35;
+		if(tweet.getUser().getName().length() >= maxLength) {
+			formattedName += tweet.getUser().getName().substring(0, maxLength) + "...</b>";
+		} else if (tweet.getUser().getName().length() +
+				tweet.getUser().getScreenName().length()*.75
+				> maxLength) {
+			formattedName += tweet.getUser().getName()
+					+ "</b>" + "<small><font color='#777777'> @" +
+					tweet.getUser().getScreenName().substring(0, maxLength-tweet.getUser().getName().length())
+					+ "...</font></small>";
+		} else {
+			formattedName += tweet.getUser().getName()
 				+ "</b>" + "<small><font color='#777777'> @" +
 				tweet.getUser().getScreenName() + "</font></small>";
+		}
 		nameView.setText(Html.fromHtml(formattedName));
 		
 		TextView bodyView = (TextView) view.findViewById(R.id.tvBody);
@@ -57,12 +70,18 @@ public class TweetsAdapter extends ArrayAdapter<Tweet> {
 			Log.e("err" , "Error in constructing date: " + e.toString());
 			e.printStackTrace();
 		}
-		String temp = (String) DateUtils.getRelativeTimeSpanString(
+		String time = (String) DateUtils.getRelativeTimeSpanString(
 				date.getTime(),
 				System.currentTimeMillis(),
 				DateUtils.SECOND_IN_MILLIS,
 				DateUtils.FORMAT_ABBREV_RELATIVE);
-		timeView.setText(Html.fromHtml(temp));
+		time = time.replace("mins ago", "m");
+		time = time.replace("min ago", "m");
+		time = time.replace("hours ago", "h");
+		time = time.replace("hour ago", "h");
+		time = time.replace("Yesterday", "1 d");
+		time = time.replace("days ago", "d");
+		timeView.setText(Html.fromHtml(time));
 		
 		return view;
 	}
