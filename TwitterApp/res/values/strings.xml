@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">Simple Twitter App</string>
-    <string name="title_login">Login</string>
+    <string name="title_login">CodePathTwitter</string>
     <string name="login_label">Log in</string>
     <string name="title_activity_timeline">Timeline</string>
     <string name="compose_text">Compose tweet</string>

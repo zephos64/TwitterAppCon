@@ -1,7 +1,9 @@
 package com.codepath.apps.twitterapp;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -35,6 +37,9 @@ public class ComposeTweet extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_compose_tweet);
+		
+		ActionBar actionBar = getActionBar();
+		actionBar.setBackgroundDrawable(new ColorDrawable(0xFF33B5E5));
 		
 		etComposeTweet = (EditText) findViewById(R.id.etComposeTweet);
 		tvCharLeftCounter = (TextView) findViewById(R.id.tvCharLeftCounter);
