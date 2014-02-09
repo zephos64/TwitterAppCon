@@ -3,21 +3,25 @@ package com.codepath.apps.twitterapp;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.ActionBar;
+import android.app.ActionBar.Tab;
+import android.app.ActionBar.TabListener;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.codepath.apps.twitterapp.fragments.HomeTimelineFragment;
+import com.codepath.apps.twitterapp.fragments.MentionsFragment;
 import com.codepath.apps.twitterapp.models.Tweet;
 import com.codepath.apps.twitterapp.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
-public class TimelineActivity extends FragmentActivity {
-	private HomeTimelineFragment fragmentTweets;
-	
+public class TimelineActivity extends FragmentActivity implements TabListener {
 	private final int TWEET_REQUEST_CODE = 20;
 	public static final String REQUEST_USER = "user";
 	private User user;
@@ -26,14 +30,8 @@ public class TimelineActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_timeline);
-
-		
-		fragmentTweets = (HomeTimelineFragment) getSupportFragmentManager().
-				findFragmentById(R.id.fragmentTweets);
-		
-		fragmentTweets.createMoreDataFromApi(25);
-
 		setUser();
+		setupNavigationTabs();
 	}
 
 	@Override
@@ -47,6 +45,27 @@ public class TimelineActivity extends FragmentActivity {
 		Intent i = new Intent(this, ComposeTweet.class);
 		i.putExtra(REQUEST_USER, user);
 		startActivityForResult(i, TWEET_REQUEST_CODE);
+	}
+	
+	private void setupNavigationTabs() {
+		ActionBar actionBar = getActionBar();
+		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+		actionBar.setDisplayShowTitleEnabled(true);
+		
+		Tab tabHome = actionBar.newTab()
+				.setText("Home")
+				.setTag("HomeTimelineFragment")
+				.setIcon(R.drawable.ic_home)
+				.setTabListener(this);
+		Tab tabMentions = actionBar.newTab()
+				.setText("Mentions")
+				.setTag("MentionsTimelineFragment")
+				.setIcon(R.drawable.ic_mentions)
+				.setTabListener(this);
+		
+		actionBar.addTab(tabHome);
+		actionBar.addTab(tabMentions);
+		actionBar.selectTab(tabHome);
 	}
 	
 	private void setUser() {
@@ -76,7 +95,30 @@ public class TimelineActivity extends FragmentActivity {
 				e.printStackTrace();
 			}
 			Tweet myTweet = Tweet.fromJson(jsonRes);
-			fragmentTweets.getAdapter().insert(myTweet, 0);
+			//fragmentTweets.getAdapter().insert(myTweet, 0);
+			//TODO fix: only do this for history timeline
 		}
+	}
+
+	@Override
+	public void onTabReselected(Tab tab, FragmentTransaction ft) {
+		// Unused
+	}
+
+	@Override
+	public void onTabSelected(Tab tab, FragmentTransaction ft) {
+		FragmentManager manager = getSupportFragmentManager();
+		android.support.v4.app.FragmentTransaction fts = manager.beginTransaction();
+		if(tab.getTag() == "HomeTimelineFragment") {
+			fts.replace(R.id.frame_container, new HomeTimelineFragment());
+		} else if (tab.getTag() == "MentionsTimelineFragment") {
+			fts.replace(R.id.frame_container, new MentionsFragment());
+		}
+		fts.commit();
+	}
+
+	@Override
+	public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+		// Unused
 	}
 }

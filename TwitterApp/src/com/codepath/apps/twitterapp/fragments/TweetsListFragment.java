@@ -36,17 +36,11 @@ public class TweetsListFragment extends Fragment {
 		tweetAdapter = new TweetsAdapter(getActivity(), tweets);
 		lvTweets = (PullToRefreshListView) getActivity().findViewById(R.id.lvTweets);
 		lvTweets.setAdapter(tweetAdapter);
-		
-		setupListeners();
 	}
 	
 	public TweetsAdapter getAdapter() {
 		return tweetAdapter;
 	}
-	
-	private void setupListeners() {
-		
-	};
 	
 	public long getLastTweetId() {
 		return lastTweetId;

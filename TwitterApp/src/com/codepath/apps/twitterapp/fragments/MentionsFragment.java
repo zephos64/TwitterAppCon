@@ -15,7 +15,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 
 import eu.erikw.PullToRefreshListView.OnRefreshListener;
 
-public class HomeTimelineFragment extends TweetsListFragment {
+public class MentionsFragment extends TweetsListFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -51,29 +51,32 @@ public class HomeTimelineFragment extends TweetsListFragment {
 			}
 		});
 	}
-
+	
 	public void createMoreDataFromApi(int offset) {
-		TwitterApp.getRestClient().getHomeTimeline(getLastTweetId(),
+		TwitterApp.getRestClient().getMentionsTimeline(getLastTweetId(),
 				offset, new JsonHttpResponseHandler() {
 			@Override
 			public void onSuccess(JSONArray jsonTweets) {
 				ArrayList<Tweet> tweets = Tweet.fromJson(jsonTweets);
-
+				
 				getAdapter().addAll(tweets);
 				
-				setLastTweetId(tweets.get(tweets.size()-1).getId()-1);
+				//test2
+				if(tweets.size() > 0) {
+					setLastTweetId(tweets.get(tweets.size()-1).getId()-1);
+				}
 			}
 			
 			@Override
 			public void onFailure(Throwable e, JSONObject err) {
-				Log.e("err", "Error getting timeline: " + e.toString());
+				Log.e("err", "Error getting mentions timeline: " + e.toString());
 				e.printStackTrace();
 			}
 		});
 	}
 	
 	private void fetchTimelineAsync(long newestTweetId) {
-		TwitterApp.getRestClient().getNewestTimeline(newestTweetId, new JsonHttpResponseHandler() {
+		TwitterApp.getRestClient().getNewestMentions(newestTweetId, new JsonHttpResponseHandler() {
             public void onSuccess(JSONArray json) {
             	ArrayList<Tweet> tweets = Tweet.fromJson(json);
             	while(tweets.size() > 0) {
@@ -85,7 +88,7 @@ public class HomeTimelineFragment extends TweetsListFragment {
             }
 
             public void onFailure(Throwable e) {
-                Log.e("err", "Fetch timeline error: " + e.toString());
+                Log.e("err", "Fetch mentions timeline error: " + e.toString());
             }
         });
 	}
