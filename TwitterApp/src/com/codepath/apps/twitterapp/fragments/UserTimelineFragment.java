@@ -11,11 +11,14 @@ import android.util.Log;
 import com.codepath.apps.twitterapp.EndlessScrollListener;
 import com.codepath.apps.twitterapp.TwitterApp;
 import com.codepath.apps.twitterapp.models.Tweet;
+import com.codepath.apps.twitterapp.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import eu.erikw.PullToRefreshListView.OnRefreshListener;
 
-public class MentionsFragment extends TweetsListFragment {
+public class UserTimelineFragment extends TweetsListFragment {
+	private User user;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -25,8 +28,23 @@ public class MentionsFragment extends TweetsListFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
+		loadProfileInfo();
 		setupListeners();
-		createMoreDataFromApi(25);
+	}
+	
+	private void loadProfileInfo() {
+		TwitterApp.getRestClient().getAccountDetails(new JsonHttpResponseHandler(){
+			@Override
+			public void onSuccess(JSONObject response) {
+				user = User.fromJson(response);
+				createMoreDataFromApi(25);
+			}
+			
+			@Override
+			public void onFailure(Throwable e, JSONObject err) {
+				Log.e("err", "Getting user error in profile " + e.toString());
+			}
+		});
 	}
 	
 	private void setupListeners() {
@@ -53,8 +71,11 @@ public class MentionsFragment extends TweetsListFragment {
 	}
 	
 	public void createMoreDataFromApi(int offset) {
-		TwitterApp.getRestClient().getMentionsTimeline(getLastTweetId(),
-				offset, new JsonHttpResponseHandler() {
+		TwitterApp.getRestClient().getUserTimeline(
+				offset,
+				user.getId(),
+				getLastTweetId(),
+				new JsonHttpResponseHandler() {
 			@Override
 			public void onSuccess(JSONArray jsonTweets) {
 				ArrayList<Tweet> tweets = Tweet.fromJson(jsonTweets);
@@ -75,7 +96,8 @@ public class MentionsFragment extends TweetsListFragment {
 	}
 	
 	private void fetchTimelineAsync(long newestTweetId) {
-		TwitterApp.getRestClient().getNewestMentions(newestTweetId, new JsonHttpResponseHandler() {
+		//TODO change
+		TwitterApp.getRestClient().getNewestUser(newestTweetId, user.getId(), new JsonHttpResponseHandler() {
             public void onSuccess(JSONArray json) {
             	ArrayList<Tweet> tweets = Tweet.fromJson(json);
             	while(tweets.size() > 0) {

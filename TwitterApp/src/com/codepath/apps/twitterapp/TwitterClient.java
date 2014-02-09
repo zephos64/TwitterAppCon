@@ -71,6 +71,32 @@ public class TwitterClient extends OAuthBaseClient {
     	getClient().get(apiUrl, handler);
     }
     
+    public void getUserTimeline(int count, long userId, long lastTweetId, AsyncHttpResponseHandler handler) {
+    	String apiUrl = getApiUrl("statuses/user_timeline.json");
+    	Log.d("debug", "Getting user with url: " + apiUrl + " with count " + count + " with userId "
+    			+ userId + " lastTweetId " + lastTweetId);
+    	
+    	RequestParams params = new RequestParams();
+    	params.put("count", String.valueOf(count));
+    	params.put("user_id", String.valueOf(userId));
+    	if(lastTweetId != -1) {
+    		params.put("max_id", String.valueOf(lastTweetId));
+    	}
+    	
+    	getClient().get(apiUrl, params, handler);
+    }
+    
+    public void getNewestUser(long after, long userId, AsyncHttpResponseHandler handler) {
+    	String url = getApiUrl("statuses/mentions_timeline.json");
+    	Log.d("debug", "Getting newest user with url: " + url);
+    	
+    	RequestParams params = new RequestParams();
+    	params.put("since_id", String.valueOf(after));
+    	params.put("user_id", String.valueOf(userId));
+    	
+    	getClient().get(url, params, handler);	
+    }
+    
     public void getMentionsTimeline(long from, int max, AsyncHttpResponseHandler handler) {
     	String url = getApiUrl("statuses/mentions_timeline.json");
     	Log.d("debug", "Getting mentions timeline with url: " + url

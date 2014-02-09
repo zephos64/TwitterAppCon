@@ -7,5 +7,13 @@
         android:onClick="onComposeTweet"
         android:title="@string/compose_text">
     </item>
+    
+	<item
+        android:id="@+id/miProfile"
+        android:icon="@drawable/ic_profile"
+        android:showAsAction="ifRoom"
+        android:onClick="onProfileView"
+        android:title="@string/compose_text">
+    </item>
 
 </menu>

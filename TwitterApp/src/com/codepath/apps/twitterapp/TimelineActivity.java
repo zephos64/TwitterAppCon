@@ -25,13 +25,11 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 public class TimelineActivity extends FragmentActivity implements TabListener {
 	private final int TWEET_REQUEST_CODE = 20;
 	public static final String REQUEST_USER = "user";
-	private User user;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_timeline);
-		setUser();
 		setupNavigationTabs();
 	}
 
@@ -44,8 +42,24 @@ public class TimelineActivity extends FragmentActivity implements TabListener {
 	
 	public void onComposeTweet(MenuItem mi) {
 		Intent i = new Intent(this, ComposeTweet.class);
-		i.putExtra(REQUEST_USER, user);
 		startActivityForResult(i, TWEET_REQUEST_CODE);
+	}
+	
+	public void onProfileView(MenuItem mi) {
+		TwitterApp.getRestClient().getAccountDetails(new JsonHttpResponseHandler(){
+			@Override
+			public void onSuccess(JSONObject response) {
+				User user = User.fromJson(response);
+				Intent i = new Intent(getBaseContext(), ProfileActivity.class);
+				i.putExtra(REQUEST_USER, user);
+				startActivity(i);
+			}
+			
+			@Override
+			public void onFailure(Throwable e, JSONObject err) {
+				Log.e("err", "Getting user error in profile " + e.toString());
+			}
+		});
 	}
 	
 	private void setupNavigationTabs() {
@@ -69,21 +83,6 @@ public class TimelineActivity extends FragmentActivity implements TabListener {
 		actionBar.addTab(tabHome);
 		actionBar.addTab(tabMentions);
 		actionBar.selectTab(tabHome);
-	}
-	
-	private void setUser() {
-		TwitterApp.getRestClient().getAccountDetails(new JsonHttpResponseHandler(){
-			@Override
-			public void onSuccess(JSONObject response) {
-				user = User.fromJson(response);
-				setTitle("@"+user.getScreenName());
-			}
-			
-			@Override
-			public void onFailure(Throwable e, JSONObject err) {
-				Log.e("err", "Getting user error " + e.toString());
-			}
-		});
 	}
 	
 	@Override

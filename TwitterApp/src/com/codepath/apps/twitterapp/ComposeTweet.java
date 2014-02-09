@@ -1,5 +1,7 @@
 package com.codepath.apps.twitterapp;
 
+import org.json.JSONObject;
+
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
@@ -17,6 +19,7 @@ import android.widget.TextView;
 
 import com.codepath.apps.twitterapp.models.User;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class ComposeTweet extends Activity {
@@ -48,12 +51,7 @@ public class ComposeTweet extends Activity {
 		tvName = (TextView) findViewById(R.id.tvName);
 		tvScreenName = (TextView) findViewById(R.id.tvScreenName);
 		
-		Intent i = getIntent();
-		user = (User)i.getExtras().getSerializable(TimelineActivity.REQUEST_USER);
-		ImageLoader.getInstance().displayImage(user.getProfileImageUrl(), ivProfile);
-		tvName.setText(user.getName());
-		tvScreenName.setText("@"+user.getScreenName());
-		
+		setUser();	
 		setupViewListener();
 	}
 
@@ -112,6 +110,23 @@ public class ComposeTweet extends Activity {
 			@Override
 			public void onFailure(Throwable e, String err) {
 				Log.e("err", e.toString());
+			}
+		});
+	}
+	
+	private void setUser() {
+		TwitterApp.getRestClient().getAccountDetails(new JsonHttpResponseHandler(){
+			@Override
+			public void onSuccess(JSONObject response) {
+				user = User.fromJson(response);
+				ImageLoader.getInstance().displayImage(user.getProfileImageUrl(), ivProfile);
+				tvName.setText(user.getName());
+				tvScreenName.setText("@"+user.getScreenName());
+			}
+			
+			@Override
+			public void onFailure(Throwable e, JSONObject err) {
+				Log.e("err", "Getting user error in compose " + e.toString());
 			}
 		});
 	}
