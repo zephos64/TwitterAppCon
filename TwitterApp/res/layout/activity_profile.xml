@@ -61,9 +61,8 @@
             android:text="Y Following"/>
     </LinearLayout>
     
-   <fragment
-       android:id="@+id/fragmentUserTimeline"
-       android:name="com.codepath.apps.twitterapp.fragments.UserTimelineFragment"
+   <FrameLayout
+       android:id="@+id/flUserTimeline"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
        android:layout_alignParentLeft="true"

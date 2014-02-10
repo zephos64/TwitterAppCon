@@ -6,24 +6,31 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import org.json.JSONObject;
+
 import android.content.Context;
+import android.content.Intent;
 import android.text.Html;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.codepath.apps.twitterapp.models.Tweet;
+import com.codepath.apps.twitterapp.models.User;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class TweetsAdapter extends ArrayAdapter<Tweet> {
-
+	Context cont;
 	public TweetsAdapter(Context context, List<Tweet> tweets) {
 		super(context, 0, tweets);
+		cont = context;
 	}
 	
 	@Override
@@ -39,6 +46,7 @@ public class TweetsAdapter extends ArrayAdapter<Tweet> {
 		
 		ImageView imageView = (ImageView) view.findViewById(R.id.ivProfile);
 		ImageLoader.getInstance().displayImage(tweet.getUser().getProfileImageUrl(), imageView);
+		imageView.setOnClickListener(new myOnClickListener(position));
 		
 		TextView nameView = (TextView) view.findViewById(R.id.tvName);
 		String formattedName = "<b>";
@@ -82,7 +90,39 @@ public class TweetsAdapter extends ArrayAdapter<Tweet> {
 		time = time.replace("Yesterday", "1 d");
 		time = time.replace("days ago", "d");
 		timeView.setText(Html.fromHtml(time));
-		
+	
 		return view;
+	}
+	
+	public class myOnClickListener implements OnClickListener{
+        private int position;
+        public myOnClickListener(int position){
+            this.position=position;
+        }
+        @Override
+        public void onClick(View v) {
+            openProfileWithUserFromPosition(position);
+        }
+    }
+	
+	public void openProfileWithUserFromPosition(int position) {
+		Log.d("Testing Click", "Getting item at position " + position + " with id "
+				+ getItem(position).getId());
+        TwitterApp.getRestClient().getUser(getItem(position).getUser().getId(),
+        		new JsonHttpResponseHandler(){
+			@Override
+			public void onSuccess(JSONObject response) {
+				User user = User.fromJson(response);
+				Intent i = new Intent(cont, ProfileActivity.class);
+				i.putExtra(TimelineActivity.REQUEST_USER, user);
+				cont.startActivity(i);
+			}
+			
+			@Override
+			public void onFailure(Throwable e, JSONObject err) {
+				Log.e("err", "Getting user error in profile in adapter " + e.toString());
+				e.printStackTrace();
+			}
+		});
 	}
 }

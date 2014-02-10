@@ -4,11 +4,14 @@ import android.app.ActionBar;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.codepath.apps.twitterapp.fragments.UserTimelineFragment;
 import com.codepath.apps.twitterapp.models.User;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -43,19 +46,14 @@ public class ProfileActivity extends FragmentActivity {
 		user = (User)extras.getSerializable(TimelineActivity.REQUEST_USER);
 		setTitle("@"+user.getScreenName());
 		populateProfileHeader(user);
-		/*TwitterApp.getRestClient().getAccountDetails(new JsonHttpResponseHandler(){
-			@Override
-			public void onSuccess(JSONObject response) {
-				user = User.fromJson(response);
-				setTitle("@"+user.getScreenName());
-				populateProfileHeader(user);
-			}
-			
-			@Override
-			public void onFailure(Throwable e, JSONObject err) {
-				Log.e("err", "Getting user error in profile " + e.toString());
-			}
-		});*/
+		
+		Bundle bundle = new Bundle();
+		bundle.putSerializable(TimelineActivity.REQUEST_USER, user);
+		Fragment fragInfo = new UserTimelineFragment();
+        fragInfo.setArguments(bundle);
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		ft.replace(R.id.flUserTimeline, fragInfo);
+		ft.commit();
 	}
 	
 	private void populateProfileHeader(User u) {
@@ -64,7 +62,6 @@ public class ProfileActivity extends FragmentActivity {
 		tvTagLine.setText(u.getTagline());
 		tvFollowers.setText(u.getFollowersCount() + " Followers");
 		tvFollowing.setText(u.getFriendsCount() + " Following");
-		//test
 	}
 
 	@Override

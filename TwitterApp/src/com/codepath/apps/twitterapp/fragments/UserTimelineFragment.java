@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.codepath.apps.twitterapp.EndlessScrollListener;
+import com.codepath.apps.twitterapp.TimelineActivity;
 import com.codepath.apps.twitterapp.TwitterApp;
 import com.codepath.apps.twitterapp.models.Tweet;
 import com.codepath.apps.twitterapp.models.User;
@@ -27,24 +28,11 @@ public class UserTimelineFragment extends TweetsListFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-
-		loadProfileInfo();
+		
+		user = (User)getArguments().getSerializable(TimelineActivity.REQUEST_USER);
+		createMoreDataFromApi(25);
+		
 		setupListeners();
-	}
-	
-	private void loadProfileInfo() {
-		TwitterApp.getRestClient().getAccountDetails(new JsonHttpResponseHandler(){
-			@Override
-			public void onSuccess(JSONObject response) {
-				user = User.fromJson(response);
-				createMoreDataFromApi(25);
-			}
-			
-			@Override
-			public void onFailure(Throwable e, JSONObject err) {
-				Log.e("err", "Getting user error in profile " + e.toString());
-			}
-		});
 	}
 	
 	private void setupListeners() {
@@ -96,7 +84,6 @@ public class UserTimelineFragment extends TweetsListFragment {
 	}
 	
 	private void fetchTimelineAsync(long newestTweetId) {
-		//TODO change
 		TwitterApp.getRestClient().getNewestUser(newestTweetId, user.getId(), new JsonHttpResponseHandler() {
             public void onSuccess(JSONArray json) {
             	ArrayList<Tweet> tweets = Tweet.fromJson(json);
