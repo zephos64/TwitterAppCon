@@ -29,6 +29,7 @@ public class UserTimelineFragment extends TweetsListFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		
+		showProgressBar();
 		user = (User)getArguments().getSerializable(TimelineActivity.REQUEST_USER);
 		createMoreDataFromApi(25);
 		
@@ -66,6 +67,7 @@ public class UserTimelineFragment extends TweetsListFragment {
 				new JsonHttpResponseHandler() {
 			@Override
 			public void onSuccess(JSONArray jsonTweets) {
+				hideProgressBar();
 				ArrayList<Tweet> tweets = Tweet.fromJson(jsonTweets);
 				
 				getAdapter().addAll(tweets);
@@ -77,6 +79,7 @@ public class UserTimelineFragment extends TweetsListFragment {
 			
 			@Override
 			public void onFailure(Throwable e, JSONObject err) {
+				hideProgressBar();
 				Log.e("err", "Error getting mentions timeline: " + e.toString());
 				e.printStackTrace();
 			}

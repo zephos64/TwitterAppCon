@@ -26,6 +26,7 @@ public class MentionsFragment extends TweetsListFragment {
 		super.onActivityCreated(savedInstanceState);
 
 		setupListeners();
+		showProgressBar();
 		createMoreDataFromApi(25);
 	}
 	
@@ -57,6 +58,7 @@ public class MentionsFragment extends TweetsListFragment {
 				offset, new JsonHttpResponseHandler() {
 			@Override
 			public void onSuccess(JSONArray jsonTweets) {
+				hideProgressBar();
 				ArrayList<Tweet> tweets = Tweet.fromJson(jsonTweets);
 				
 				getAdapter().addAll(tweets);
@@ -68,6 +70,7 @@ public class MentionsFragment extends TweetsListFragment {
 			
 			@Override
 			public void onFailure(Throwable e, JSONObject err) {
+				hideProgressBar();
 				Log.e("err", "Error getting mentions timeline: " + e.toString());
 				e.printStackTrace();
 			}

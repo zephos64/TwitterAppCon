@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.codepath.apps.twitterapp.R;
 import com.codepath.apps.twitterapp.TweetsAdapter;
@@ -32,6 +33,9 @@ public class TweetsListFragment extends Fragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
+		progressBar = (ProgressBar) getActivity().findViewById(R.id.pbProgess);
+		progressBar.setVisibility(ProgressBar.INVISIBLE);
+		
 		ArrayList<Tweet> tweets = new ArrayList<Tweet>();
 		tweetAdapter = new TweetsAdapter(getActivity(), tweets);
 		lvTweets = (PullToRefreshListView) getActivity().findViewById(R.id.lvTweets);
@@ -48,5 +52,14 @@ public class TweetsListFragment extends Fragment {
 	
 	public void setLastTweetId(long id) {
 		lastTweetId = id;
+	}
+	
+	private ProgressBar progressBar;
+	public void showProgressBar() {
+		progressBar.setVisibility(ProgressBar.VISIBLE);
+    }
+	
+	public void hideProgressBar() {
+		progressBar.setVisibility(ProgressBar.INVISIBLE);
 	}
 }
