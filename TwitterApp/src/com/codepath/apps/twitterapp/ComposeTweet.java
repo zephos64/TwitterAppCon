@@ -67,6 +67,7 @@ public class ComposeTweet extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.compose_tweet, menu);
+		
 		return true;
 	}
 
@@ -76,7 +77,6 @@ public class ComposeTweet extends Activity {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				tvCharLeftCounter.setText(String.valueOf(defaultCharLimit - etComposeTweet.length()));
-				
 			}
 			
 			@Override
@@ -99,6 +99,7 @@ public class ComposeTweet extends Activity {
 							android.graphics.Color.DKGRAY);
 					
 					button1.setEnabled(true);
+					disableComp = false;
 				}
 			}
 		});
