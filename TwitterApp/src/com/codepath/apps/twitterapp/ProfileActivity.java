@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -30,6 +31,7 @@ public class ProfileActivity extends FragmentActivity {
 		
 		ActionBar actionBar = getActionBar();
 		actionBar.setBackgroundDrawable(new ColorDrawable(0xFF33B5E5));
+		actionBar.setDisplayHomeAsUpEnabled(true);
 		
 		ivProfileImage = (ImageView) findViewById(R.id.ivProfileImage);
 		tvName = (TextView) findViewById(R.id.tvName);
@@ -39,6 +41,12 @@ public class ProfileActivity extends FragmentActivity {
 
 		loadProfileInfo();
 	}
+	
+	@Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+		onBackPressed();
+		return true;
+    }
 	
 	private void loadProfileInfo() {
 		Intent i = getIntent();

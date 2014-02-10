@@ -11,6 +11,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -43,6 +44,7 @@ public class ComposeTweet extends Activity {
 		
 		ActionBar actionBar = getActionBar();
 		actionBar.setBackgroundDrawable(new ColorDrawable(0xFF33B5E5));
+		actionBar.setDisplayHomeAsUpEnabled(true);
 		
 		etComposeTweet = (EditText) findViewById(R.id.etComposeTweet);
 		tvCharLeftCounter = (TextView) findViewById(R.id.tvCharLeftCounter);
@@ -54,6 +56,12 @@ public class ComposeTweet extends Activity {
 		setUser();	
 		setupViewListener();
 	}
+	
+	@Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+		onBackPressed();
+		return true;
+    }
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

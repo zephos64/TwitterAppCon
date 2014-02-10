@@ -25,7 +25,6 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 public class TimelineActivity extends FragmentActivity implements TabListener {
 	private final int TWEET_REQUEST_CODE = 20;
 	public static final String REQUEST_USER = "user";
-	private Tab curTab;
 	
 	private HomeTimelineFragment homeTL;
 	private MentionsFragment mentions;
@@ -100,7 +99,7 @@ public class TimelineActivity extends FragmentActivity implements TabListener {
 				Log.e("err", "Error composing tweet" + e.toString());
 				e.printStackTrace();
 			}
-			if(curTab.getTag() == "HomeTimelineFragment") {
+			if(getActionBar().getSelectedTab().getTag() == "HomeTimelineFragment") {
 				Tweet myTweet = Tweet.fromJson(jsonRes);
 				homeTL.getAdapter().insert(myTweet, 0);
 			}
@@ -114,7 +113,6 @@ public class TimelineActivity extends FragmentActivity implements TabListener {
 
 	@Override
 	public void onTabSelected(Tab tab, FragmentTransaction ft) {
-		curTab = tab;
 		FragmentManager manager = getSupportFragmentManager();
 		android.support.v4.app.FragmentTransaction fts = manager.beginTransaction();
 		if(tab.getTag() == "HomeTimelineFragment") {
