@@ -25,6 +25,10 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 public class TimelineActivity extends FragmentActivity implements TabListener {
 	private final int TWEET_REQUEST_CODE = 20;
 	public static final String REQUEST_USER = "user";
+	private Tab curTab;
+	
+	private HomeTimelineFragment homeTL;
+	private MentionsFragment mentions;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -96,9 +100,10 @@ public class TimelineActivity extends FragmentActivity implements TabListener {
 				Log.e("err", "Error composing tweet" + e.toString());
 				e.printStackTrace();
 			}
-			Tweet myTweet = Tweet.fromJson(jsonRes);
-			//fragmentTweets.getAdapter().insert(myTweet, 0);
-			//TODO fix: only do this for history timeline
+			if(curTab.getTag() == "HomeTimelineFragment") {
+				Tweet myTweet = Tweet.fromJson(jsonRes);
+				homeTL.getAdapter().insert(myTweet, 0);
+			}
 		}
 	}
 
@@ -109,12 +114,19 @@ public class TimelineActivity extends FragmentActivity implements TabListener {
 
 	@Override
 	public void onTabSelected(Tab tab, FragmentTransaction ft) {
+		curTab = tab;
 		FragmentManager manager = getSupportFragmentManager();
 		android.support.v4.app.FragmentTransaction fts = manager.beginTransaction();
 		if(tab.getTag() == "HomeTimelineFragment") {
-			fts.replace(R.id.frame_container, new HomeTimelineFragment());
+			if(homeTL == null) {
+				homeTL = new HomeTimelineFragment();
+			}
+			fts.replace(R.id.flList, homeTL);
 		} else if (tab.getTag() == "MentionsTimelineFragment") {
-			fts.replace(R.id.frame_container, new MentionsFragment());
+			if(mentions == null) {
+				mentions = new MentionsFragment();
+			}
+			fts.replace(R.id.flList, new MentionsFragment());
 		}
 		fts.commit();
 	}

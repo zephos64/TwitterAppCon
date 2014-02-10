@@ -83,6 +83,8 @@ public class TweetsAdapter extends ArrayAdapter<Tweet> {
 				System.currentTimeMillis(),
 				DateUtils.SECOND_IN_MILLIS,
 				DateUtils.FORMAT_ABBREV_RELATIVE);
+		time = time.replace("secs ago", "s");
+		time = time.replace("sec ago", "s");
 		time = time.replace("mins ago", "m");
 		time = time.replace("min ago", "m");
 		time = time.replace("hours ago", "h");
