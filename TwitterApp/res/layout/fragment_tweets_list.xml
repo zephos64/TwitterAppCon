@@ -3,11 +3,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-        <eu.erikw.PullToRefreshListView
-            android:id="@+id/lvTweets"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" />
-    
+    <eu.erikw.PullToRefreshListView
+        android:id="@+id/lvTweets"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <ProgressBar
+        android:id="@+id/pbProgess"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" />
+
 </RelativeLayout>

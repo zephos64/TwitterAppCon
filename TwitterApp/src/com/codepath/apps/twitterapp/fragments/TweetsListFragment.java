@@ -9,37 +9,45 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import com.codepath.apps.twitterapp.EndlessScrollListener;
 import com.codepath.apps.twitterapp.R;
 import com.codepath.apps.twitterapp.TweetsAdapter;
 import com.codepath.apps.twitterapp.TwitterClient;
 import com.codepath.apps.twitterapp.models.Tweet;
 
 import eu.erikw.PullToRefreshListView;
+import eu.erikw.PullToRefreshListView.OnRefreshListener;
 
-public class TweetsListFragment extends Fragment {
+public abstract class TweetsListFragment extends Fragment {
 	TweetsAdapter tweetAdapter;
 	PullToRefreshListView lvTweets;
 	private long lastTweetId;
+	private ProgressBar progressBar;
 	
 	@Override
 	public View onCreateView(LayoutInflater inf,
 			ViewGroup parent,
 			Bundle savedInstanceState) {
+		View view = inf.inflate(R.layout.fragment_tweets_list, parent, false);
+		
 		lastTweetId = TwitterClient.TWITTER_NO_ID;
-		return inf.inflate(R.layout.fragment_tweets_list, parent, false);
+		tweetAdapter = new TweetsAdapter(getActivity(), new ArrayList<Tweet>());
+		
+		progressBar = (ProgressBar) view.findViewById(R.id.pbProgess);
+		lvTweets = (PullToRefreshListView) view.findViewById(R.id.lvTweets);
+
+		return view;
 	}
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
-		progressBar = (ProgressBar) getActivity().findViewById(R.id.pbProgess);
-		progressBar.setVisibility(ProgressBar.INVISIBLE);
-		
-		ArrayList<Tweet> tweets = new ArrayList<Tweet>();
-		tweetAdapter = new TweetsAdapter(getActivity(), tweets);
-		lvTweets = (PullToRefreshListView) getActivity().findViewById(R.id.lvTweets);
 		lvTweets.setAdapter(tweetAdapter);
+		
+		setupListeners();
+		showProgressBar();
+		createMoreDataFromApi(25);
 	}
 	
 	public TweetsAdapter getAdapter() {
@@ -54,7 +62,6 @@ public class TweetsListFragment extends Fragment {
 		lastTweetId = id;
 	}
 	
-	private ProgressBar progressBar;
 	public void showProgressBar() {
 		progressBar.setVisibility(ProgressBar.VISIBLE);
     }
@@ -62,4 +69,30 @@ public class TweetsListFragment extends Fragment {
 	public void hideProgressBar() {
 		progressBar.setVisibility(ProgressBar.INVISIBLE);
 	}
+	
+	private void setupListeners() {
+		lvTweets.setOnScrollListener(new EndlessScrollListener() {
+			@Override
+			public void onLoadMore(int page, int totalItemsCount) {
+				if(getLastTweetId() != -1) {
+					// this was getting called before onActivityCreated,
+					// so adding checking to ensure this is always done after
+					// data populated
+					createMoreDataFromApi(15);
+				}
+			}
+		});
+		
+		lvTweets.setOnRefreshListener(new OnRefreshListener() {
+			@Override
+			public void onRefresh() {
+				if(tweetAdapter.getCount() > 0) {
+					fetchTimelineAsync(tweetAdapter.getItem(0).getId());
+				}
+			}
+		});
+	}
+	
+	abstract void createMoreDataFromApi(int i);
+	abstract void fetchTimelineAsync(long l);
 }
