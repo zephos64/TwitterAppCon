@@ -27,7 +27,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 public class ComposeTweet extends Activity {
 	
 	private EditText etComposeTweet;
-	private TextView tvCharLeftCounter;
 	private Button button1;
 	private ImageView ivProfile;
 	private TextView tvName;
@@ -49,7 +48,6 @@ public class ComposeTweet extends Activity {
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		
 		etComposeTweet = (EditText) findViewById(R.id.etComposeTweet);
-		tvCharLeftCounter = (TextView) findViewById(R.id.tvCharLeftCounter);
 		button1 = (Button) findViewById(R.id.button1);
 		ivProfile = (ImageView) findViewById(R.id.ivProfile);
 		tvName = (TextView) findViewById(R.id.tvName);
@@ -91,7 +89,6 @@ public class ComposeTweet extends Activity {
 			
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				tvCharLeftCounter.setText(String.valueOf(defaultCharLimit - etComposeTweet.length()));
 				curCharCount = etComposeTweet.length();
 				refreshActionBar();
 			}
@@ -107,14 +104,9 @@ public class ComposeTweet extends Activity {
 						(curCharCount > defaultCharLimit)) {
 					//Disable functionality, tweet too long
 					button1.setEnabled(false);
-					tvCharLeftCounter.setTextColor(
-							android.graphics.Color.RED);
 					disableComp = true;
 				} else if (disableComp == true &&
 						(curCharCount <= defaultCharLimit)) {
-					tvCharLeftCounter.setTextColor(
-							android.graphics.Color.DKGRAY);
-					
 					button1.setEnabled(true);
 					disableComp = false;
 				}

@@ -8,16 +8,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".ComposeTweet" >
 
-    <TextView
-        android:id="@+id/tvCharLeftCounter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/tvCharLeft"
-        android:layout_alignBottom="@+id/tvCharLeft"
-        android:layout_marginLeft="16dp"
-        android:layout_toRightOf="@+id/tvCharLeft"
-        android:text="@string/defCharLimit" />
-
     <Button
         android:id="@+id/button1"
         android:layout_width="wrap_content"
@@ -63,13 +53,5 @@
 
         <requestFocus />
     </EditText>
-
-    <TextView
-        android:id="@+id/tvCharLeft"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/ivProfile"
-        android:layout_alignTop="@+id/button1"
-        android:text="@string/charleft" />
 
 </RelativeLayout>
