@@ -4,6 +4,8 @@ import org.json.JSONObject;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -13,8 +15,6 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -27,7 +27,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 public class ComposeTweet extends Activity {
 	
 	private EditText etComposeTweet;
-	private Button button1;
 	private ImageView ivProfile;
 	private TextView tvName;
 	private TextView tvScreenName;
@@ -48,7 +47,6 @@ public class ComposeTweet extends Activity {
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		
 		etComposeTweet = (EditText) findViewById(R.id.etComposeTweet);
-		button1 = (Button) findViewById(R.id.button1);
 		ivProfile = (ImageView) findViewById(R.id.ivProfile);
 		tvName = (TextView) findViewById(R.id.tvName);
 		tvScreenName = (TextView) findViewById(R.id.tvScreenName);
@@ -60,10 +58,15 @@ public class ComposeTweet extends Activity {
 	@Override
     public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId()) {
+			case android.R.id.home:
+				onBackPressed();
+				break;
 			case R.id.word_count:
 				break;
+			case R.id.send_tweet:
+				sendTweet();
+				break;
 			default:
-				onBackPressed();
 				break;
 		}
 		return true;
@@ -103,18 +106,30 @@ public class ComposeTweet extends Activity {
 				if(disableComp == false &&
 						(curCharCount > defaultCharLimit)) {
 					//Disable functionality, tweet too long
-					button1.setEnabled(false);
 					disableComp = true;
 				} else if (disableComp == true &&
 						(curCharCount <= defaultCharLimit)) {
-					button1.setEnabled(true);
 					disableComp = false;
 				}
 			}
 		});
 	}
 	
-	public void sendTweet(View v) {
+	public void sendTweet() {
+		if(disableComp) {
+			new AlertDialog.Builder(this)
+					.setTitle("Too Many Characters")
+					.setMessage("Tweets only allow up to " + defaultCharLimit +
+							"characters, please shorten your tweet and try again")
+					.setPositiveButton(android.R.string.ok,
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int which) {
+									// continue with delete
+								}
+							}).show();
+			return;
+		}
 		TwitterApp.getRestClient().postTweet(etComposeTweet.getText().toString(),
 				new AsyncHttpResponseHandler(){
 			@Override

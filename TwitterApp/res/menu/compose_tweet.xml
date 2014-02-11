@@ -3,4 +3,8 @@
     <item android:id="@+id/word_count"
           android:title="140"
           android:showAsAction="always" />
+    
+    <item android:id="@+id/send_tweet"
+          android:title="@string/tweet"
+          android:showAsAction="always" />
 </menu>
