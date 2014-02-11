@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -34,6 +35,7 @@ public class ComposeTweet extends Activity {
 	
 	private User user;
 	private int defaultCharLimit = 140;
+	private int curCharCount = 0;
 	private boolean disableComp = false;
 	public static final String COMPOSE_KEY = "composedTweet";
 	
@@ -59,7 +61,13 @@ public class ComposeTweet extends Activity {
 	
 	@Override
     public boolean onOptionsItemSelected(MenuItem item) {
-		onBackPressed();
+		switch(item.getItemId()) {
+			case R.id.word_count:
+				break;
+			default:
+				onBackPressed();
+				break;
+		}
 		return true;
     }
 
@@ -68,7 +76,14 @@ public class ComposeTweet extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.compose_tweet, menu);
 		
-		return true;
+		MenuItem item = menu.findItem(R.id.word_count);
+	    item.setTitle(String.valueOf(defaultCharLimit - curCharCount));
+
+	    return super.onPrepareOptionsMenu(menu);
+	}
+	
+	private void refreshActionBar() {
+		ActivityCompat.invalidateOptionsMenu(this);
 	}
 
 	private void setupViewListener() {
@@ -77,6 +92,8 @@ public class ComposeTweet extends Activity {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				tvCharLeftCounter.setText(String.valueOf(defaultCharLimit - etComposeTweet.length()));
+				curCharCount = etComposeTweet.length();
+				refreshActionBar();
 			}
 			
 			@Override
@@ -87,14 +104,14 @@ public class ComposeTweet extends Activity {
 			@Override
 			public void afterTextChanged(Editable s) {
 				if(disableComp == false &&
-						(etComposeTweet.length() > defaultCharLimit)) {
+						(curCharCount > defaultCharLimit)) {
 					//Disable functionality, tweet too long
 					button1.setEnabled(false);
 					tvCharLeftCounter.setTextColor(
 							android.graphics.Color.RED);
 					disableComp = true;
 				} else if (disableComp == true &&
-						(etComposeTweet.length() <= defaultCharLimit)) {
+						(curCharCount <= defaultCharLimit)) {
 					tvCharLeftCounter.setTextColor(
 							android.graphics.Color.DKGRAY);
 					
