@@ -25,17 +25,25 @@ public abstract class TweetsListFragment extends Fragment {
 	private ProgressBar progressBar;
 	
 	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		tweetAdapter = new TweetsAdapter(getActivity(), new ArrayList<Tweet>());
+		lastTweetId = TwitterClient.TWITTER_NO_ID;
+		createMoreDataFromApi(25);
+	}
+	
+	@Override
 	public View onCreateView(LayoutInflater inf,
 			ViewGroup parent,
 			Bundle savedInstanceState) {
 		View view = inf.inflate(R.layout.fragment_tweets_list, parent, false);
-		
-		lastTweetId = TwitterClient.TWITTER_NO_ID;
-		tweetAdapter = new TweetsAdapter(getActivity(), new ArrayList<Tweet>());
-		
+
 		progressBar = (ProgressBar) view.findViewById(R.id.pbProgess);
 		lvTweets = (PullToRefreshListView) view.findViewById(R.id.lvTweets);
-
+		
+		showProgressBar();
+		setupListeners();
+		
 		return view;
 	}
 	
@@ -44,10 +52,6 @@ public abstract class TweetsListFragment extends Fragment {
 		super.onActivityCreated(savedInstanceState);
 
 		lvTweets.setAdapter(tweetAdapter);
-		
-		setupListeners();
-		showProgressBar();
-		createMoreDataFromApi(25);
 	}
 	
 	public TweetsAdapter getAdapter() {
