@@ -29,7 +29,6 @@ public abstract class TweetsListFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 		tweetAdapter = new TweetsAdapter(getActivity(), new ArrayList<Tweet>());
 		lastTweetId = TwitterClient.TWITTER_NO_ID;
-		createMoreDataFromApi(25);
 	}
 	
 	@Override
@@ -43,6 +42,8 @@ public abstract class TweetsListFragment extends Fragment {
 		
 		showProgressBar();
 		setupListeners();
+		
+		createMoreDataFromApi(25);
 		
 		return view;
 	}
