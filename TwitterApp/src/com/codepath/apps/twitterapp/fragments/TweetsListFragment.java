@@ -29,6 +29,7 @@ public abstract class TweetsListFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 		tweetAdapter = new TweetsAdapter(getActivity(), new ArrayList<Tweet>());
 		lastTweetId = TwitterClient.TWITTER_NO_ID;
+		createMoreDataFromApi(25);
 	}
 	
 	@Override
@@ -42,11 +43,6 @@ public abstract class TweetsListFragment extends Fragment {
 		
 		showProgressBar();
 		setupListeners();
-		
-		// Data creation here because after get data it will hide progressBar
-		// possible error case if data returned before progresBar loaded
-		// if not here
-		createMoreDataFromApi(25);
 		
 		return view;
 	}
@@ -71,11 +67,15 @@ public abstract class TweetsListFragment extends Fragment {
 	}
 	
 	public void showProgressBar() {
-		progressBar.setVisibility(ProgressBar.VISIBLE);
+		if(progressBar != null) {
+			progressBar.setVisibility(ProgressBar.VISIBLE);
+		}
     }
 	
 	public void hideProgressBar() {
-		progressBar.setVisibility(ProgressBar.INVISIBLE);
+		if(progressBar != null) {
+			progressBar.setVisibility(ProgressBar.INVISIBLE);
+		}
 	}
 	
 	private void setupListeners() {

@@ -18,8 +18,9 @@ public class UserTimelineFragment extends TweetsListFragment {
 	private User user;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
 		user = (User)getArguments().getSerializable(TimelineActivity.REQUEST_USER);
+		super.onCreate(savedInstanceState);
+		
 	}
 	
 	@Override
