@@ -43,6 +43,9 @@ public abstract class TweetsListFragment extends Fragment {
 		showProgressBar();
 		setupListeners();
 		
+		// Data creation here because after get data it will hide progressBar
+		// possible error case if data returned before progresBar loaded
+		// if not here
 		createMoreDataFromApi(25);
 		
 		return view;
